@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include "DexInfo.h"
 
 using namespace std;
 
@@ -12,11 +13,15 @@ class DexParser {
 
     void parse();
 
+    ~DexParser();
+
    private:
     void parseHead();
 
    private:
     vector<unsigned char> content;
     int current_offset;
+    DexInfo* dex_info;
+
 };
 #endif
