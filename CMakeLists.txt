@@ -6,7 +6,7 @@ enable_testing()
 
 include_directories(header)
 
-add_executable(DexParser Main.cpp DexHeader.cpp DexParser.cpp)
+add_executable(DexParser Main.cpp DexParser.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

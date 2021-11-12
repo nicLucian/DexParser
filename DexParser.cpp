@@ -60,43 +60,37 @@ void DexParser::parse() {
 }
 
 void DexParser::parseHead() {
-    vector<uchar> magic = readChars(content, current_offset, 8);
+    dex_header.magic = readChars(content, current_offset, 8);
     current_offset += 8;
-    uint checksum = readUInt(content, current_offset);
-    vector<uchar> signature = readChars(content, current_offset + 4, 20);
-    uint file_size = readUInt(content, current_offset + 24);
-    uint header_size = readUInt(content, current_offset + 28);
-    uint endian_tag = readUInt(content, current_offset + 32);
-    uint link_size = readUInt(content, current_offset + 36);
-    uint link_off = readUInt(content, current_offset + 40);
-    uint map_off = readUInt(content, current_offset + 44);
-    uint string_ids_size = readUInt(content, current_offset + 48);
-    uint string_ids_off = readUInt(content, current_offset + 52);
-    uint type_ids_size = readUInt(content, current_offset + 56);
-    uint type_ids_off = readUInt(content, current_offset + 60);
-    uint proto_ids_size = readUInt(content, current_offset + 64);
-    uint proto_ids_off = readUInt(content, current_offset + 68);
-    uint field_ids_size = readUInt(content, current_offset + 72);
-    uint field_ids_off = readUInt(content, current_offset + 76);
-    uint method_ids_size = readUInt(content, current_offset + 80);
-    uint method_ids_off = readUInt(content, current_offset + 84);
-    uint class_defs_size = readUInt(content, current_offset + 88);
-    uint class_defs_off = readUInt(content, current_offset + 92);
-    uint data_size = readUInt(content, current_offset + 96);
-    uint data_off = readUInt(content, current_offset + 100);
+    dex_header.checksum = readUInt(content, current_offset);
+    dex_header.signature = readChars(content, current_offset + 4, 20);
+    dex_header.file_size = readUInt(content, current_offset + 24);
+    dex_header.header_size = readUInt(content, current_offset + 28);
+    dex_header.endian_tag = readUInt(content, current_offset + 32);
+    dex_header.link_size = readUInt(content, current_offset + 36);
+    dex_header.link_off = readUInt(content, current_offset + 40);
+    dex_header.map_off = readUInt(content, current_offset + 44);
+    dex_header.string_ids_size = readUInt(content, current_offset + 48);
+    dex_header.string_ids_off = readUInt(content, current_offset + 52);
+    dex_header.type_ids_size = readUInt(content, current_offset + 56);
+    dex_header.type_ids_off = readUInt(content, current_offset + 60);
+    dex_header.proto_ids_size = readUInt(content, current_offset + 64);
+    dex_header.proto_ids_off = readUInt(content, current_offset + 68);
+    dex_header.field_ids_size = readUInt(content, current_offset + 72);
+    dex_header.field_ids_off = readUInt(content, current_offset + 76);
+    dex_header.method_ids_size = readUInt(content, current_offset + 80);
+    dex_header.method_ids_off = readUInt(content, current_offset + 84);
+    dex_header.class_defs_size = readUInt(content, current_offset + 88);
+    dex_header.class_defs_off = readUInt(content, current_offset + 92);
+    dex_header.data_size = readUInt(content, current_offset + 96);
+    dex_header.data_off = readUInt(content, current_offset + 100);
     current_offset += 100;
-    dex_header = new DexHeader(
-        magic, checksum, signature, file_size, header_size, endian_tag,
-        link_size, link_off, map_off, string_ids_size, string_ids_off,
-        type_ids_size, type_ids_off, proto_ids_size, proto_ids_off,
-        field_ids_size, field_ids_off, method_ids_size, method_ids_off,
-        class_defs_size, class_defs_off, data_size, data_off);
 }
 
 void DexParser::parseStrings() {
-    uint current_string_id_offset = dex_header->get_string_ids_off();
+    uint current_string_id_offset = dex_header.string_ids_off;
     uint string_data_offset = readUInt(content, current_string_id_offset);
-    for (int i = 0; i < dex_header->get_string_ids_size(); i++) {
+    for (int i = 0; i < dex_header.string_ids_size; i++) {
         // fisrt:actual result of current uleb128
         // second:bits of current uleb128
         pair<uint, uint> string_data_info =
@@ -115,8 +109,8 @@ void DexParser::parseStrings() {
 }
 
 void DexParser::parseTypes() {
-    uint current_types_id_offset = dex_header->get_type_ids_off();
-    uint types_id_size = dex_header->get_type_ids_size();
+    uint current_types_id_offset = dex_header.type_ids_off;
+    uint types_id_size = dex_header.type_ids_size;
     for (uint i = 0; i < types_id_size; i++) {
         uint type_id = readUInt(content, current_types_id_offset);
         type_ids.push_back(type_id);
@@ -125,8 +119,8 @@ void DexParser::parseTypes() {
 }
 
 void DexParser::parseProtos() {
-    uint proto_id_offset = dex_header->get_proto_ids_off();
-    uint proto_id_size = dex_header->get_proto_ids_size();
+    uint proto_id_offset = dex_header.proto_ids_off;
+    uint proto_id_size = dex_header.proto_ids_size;
     for (uint i = 0; i < proto_id_size; i++) {
         Proto proto;
         proto.shorty_idx = readUInt(content, proto_id_offset);
@@ -135,17 +129,12 @@ void DexParser::parseProtos() {
         if (parameters_offset) {
             uint param_size = readUInt(content, parameters_offset);
             for (uint i = 0; i < param_size; i++) {
-                ushort type_id = readUShort(content, parameters_offset + i * 2 + 4);
+                ushort type_id =
+                    readUShort(content, parameters_offset + i * 2 + 4);
                 proto.params_type_id.push_back(type_id);
             }
         }
         protos.push_back(proto);
         proto_id_offset += 12;
-    }
-}
-
-DexParser::~DexParser() {
-    if (dex_header) {
-        delete dex_header;
     }
 }

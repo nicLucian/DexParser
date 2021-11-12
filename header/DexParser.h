@@ -3,9 +3,8 @@
 
 #include <iostream>
 #include <vector>
-#include "DexHeader.h"
+
 #include "type.h"
-#include "Proto.h"
 
 using namespace std;
 
@@ -14,8 +13,6 @@ class DexParser {
     DexParser(vector<uchar>& content);
 
     void parse();
-
-    ~DexParser();
 
    private:
     void parseHead();
@@ -26,10 +23,9 @@ class DexParser {
    private:
     vector<uchar> content;
     int current_offset;
-    DexHeader* dex_header;
+    DexHeader dex_header;
     vector<string> strings;
     vector<uint> type_ids;
     vector<Proto> protos;
-
 };
 #endif
