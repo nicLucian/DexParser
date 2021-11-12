@@ -3,13 +3,15 @@
 
 #include <iostream>
 #include <vector>
-#include "DexInfo.h"
+#include "DexHeader.h"
+#include "type.h"
+#include "Proto.h"
 
 using namespace std;
 
 class DexParser {
    public:
-    DexParser(vector<unsigned char>& content);
+    DexParser(vector<uchar>& content);
 
     void parse();
 
@@ -17,11 +19,17 @@ class DexParser {
 
    private:
     void parseHead();
+    void parseStrings();
+    void parseTypes();
+    void parseProtos();
 
    private:
-    vector<unsigned char> content;
+    vector<uchar> content;
     int current_offset;
-    DexInfo* dex_info;
+    DexHeader* dex_header;
+    vector<string> strings;
+    vector<uint> type_ids;
+    vector<Proto> protos;
 
 };
 #endif

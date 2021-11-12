@@ -6,10 +6,10 @@
 
 using namespace std;
 
-vector<unsigned char> readFile(string path) {
-    vector<unsigned char> result;
+vector<uchar> readFile(string path) {
+    vector<uchar> result;
     ifstream in_file(path);
-    unsigned char tmp;
+    uchar tmp;
     while (!in_file.eof()) {
         tmp = in_file.get();
         result.push_back(tmp);
@@ -18,9 +18,9 @@ vector<unsigned char> readFile(string path) {
     return result;
 }
 
-int main() {
-    vector<unsigned char> content = readFile("resource/classes3.dex");
-    std::cout << "size = " << content.size();
+int main(int, char**) {
+    vector<uchar> content = readFile("../resource/classes3.dex");
     DexParser parser(content);
     parser.parse();
+    return 0;
 }
