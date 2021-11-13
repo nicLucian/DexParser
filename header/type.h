@@ -46,4 +46,10 @@ struct field_id_item {
   uint name_idx;     // index into string_ids;
 };
 
+struct method_id_item {
+  ushort class_idx;  // index into types;
+  ushort proto_idx;  // index into protos;
+  uint name_idx;     // index into string_ids;
+}
+
 #endif

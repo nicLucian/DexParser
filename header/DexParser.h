@@ -20,6 +20,7 @@ class DexParser {
     void parseTypes();
     void parseProtos();
     void parseFields();
+    void parseMethods();
 
    private:
     vector<uchar> content;
@@ -29,5 +30,6 @@ class DexParser {
     vector<uint> types;
     vector<proto_id_item> protos;
     vector<field_id_item> fields;
+    vector<method_id_item> methods;
 };
 #endif

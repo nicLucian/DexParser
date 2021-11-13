@@ -57,6 +57,7 @@ void DexParser::parse() {
   parseTypes();
   parseProtos();
   parseFields();
+  parseMethod();
 }
 
 void DexParser::parseHead() {
@@ -148,4 +149,17 @@ void DexParser::parseFields() {
     fields.push_back(item);
     field_ids_offset += 8;
   }
+}
+
+void DexParser::parseMethods() {
+    uint method_ids_offset = dex_header.method_ids_off;
+    uint method_ids_size = dex_header.method_ids_size;
+    for (int i = 0; i < method_ids_size; i++) {
+        method_id_item item;
+        item.class_idx = readUShort(content, method_ids_offset);
+        item.proto_idx = readUShort(content, method_ids_offset + 2);
+        item.name_idx = readUInt(content, method_ids_offset + 4);
+        method_ids_offset += 8;
+        methods.push_back(item);
+    }
 }
