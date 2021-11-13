@@ -19,13 +19,15 @@ class DexParser {
     void parseStrings();
     void parseTypes();
     void parseProtos();
+    void parseFields();
 
    private:
     vector<uchar> content;
     int current_offset;
-    DexHeader dex_header;
+    header_item dex_header;
     vector<string> strings;
-    vector<uint> type_ids;
-    vector<Proto> protos;
+    vector<uint> types;
+    vector<proto_id_item> protos;
+    vector<field_id_item> fields;
 };
 #endif
