@@ -115,7 +115,7 @@ struct class_def_item {
     uint class_idx;
     uint access_flags;
     uint superclass_idx;
-    vector<uint> interfaces_idx;
+    vector<ushort> interfaces_idx;
     uint source_file_idx;
     annotations_directory_item annotaions;
     class_data_item class_data;
