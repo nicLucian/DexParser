@@ -57,7 +57,7 @@ void DexParser::parse() {
   parseTypes();
   parseProtos();
   parseFields();
-  parseMethod();
+  parseMethods();
 }
 
 void DexParser::parseHead() {
