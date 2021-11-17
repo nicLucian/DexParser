@@ -1,4 +1,4 @@
-#include "header/DexParser.h"
+#include "DexParser.h"
 
 #include <iostream>
 #include <sstream>

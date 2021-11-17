@@ -6,7 +6,8 @@ enable_testing()
 
 include_directories(header)
 
-add_executable(DexParser Main.cpp DexParser.cpp)
+aux_source_directory(src SRC_LIST)
+add_executable(DexParser Main.cpp ${SRC_LIST})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
